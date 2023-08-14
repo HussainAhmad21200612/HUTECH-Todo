@@ -37,12 +37,6 @@ app.get("/todo-data",(req,res)=>{
     res.redirect("/login");
     return;
   }
-    // readAllTodos("./files.txt",function (err, data) {
-    //     if (err) {
-    //       res.status(500).send("error");
-    //       return;
-    //     }
-        // res.status(200).send(JSON.stringify(data));
         Todo.findOne({user:req.session.user}).then((doc)=>{
             if(doc===null){
                 res.status(200).json([]);
@@ -69,21 +63,6 @@ app.get("/todo",(req,res)=>{
       res.redirect("/login");
       return;
     }
-    // readAllTodos("./files.txt",function (err, data) {
-    //   if (err) {
-    //     res.status(500).send("error");
-    //     return;
-    //   }
-    //     // datat = JSON.stringify(data);
-    //     // console.log(data, data[data.length - 1].HUBB);
-    //     // for (let c = 0; c < data.length; c++) {
-    //     //     var dd = String(req.session.user);
-    //     //     console.log(data[c].HUBB,data[c][dd]);
-    //     //     if (data[c][dd] !== undefined) {
-    //     //         console.log(dd);
-    //     //         console.log(data[c][dd][0].text);
-    //     //     }
-    //     // }
     Todo.findOne({user:req.session.user}).then((doc)=>{
     
         if(doc===null){
@@ -92,7 +71,7 @@ app.get("/todo",(req,res)=>{
         }
         console.log(doc.todo)
         res.render("newtodo.ejs",{user:req.session.user.toUpperCase(),flag:req.session.isLoggedin,image:req.session.image,todos:doc.todo});
-    // res.render("newtodo.ejs",{user:req.session.user.toUpperCase(),flag:req.session.isLoggedin,image:req.session.image,todos:data});
+    
 }).catch((err)=>{
     res.status(500).send("error");
     return;
@@ -148,40 +127,6 @@ app.get("/contact",(req,res)=>{
 });  
 app.post("/login",(req,res)=>{
   const {username,password}=req.body;
-//   fs.readFile("./users.txt", 'utf8', (err, data) => {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
-
-//     try {
-//       const parsedData = JSON.parse(data);
-//       var f=0;
-//       parsedData.forEach(function(item){
-//         if(item.username===username && item.password===password && f==0){
-//           req.session.user=item.username;
-//           req.session.password=item.password;
-//           req.session.image=item.image;
-//             req.session.isLoggedin = true;
-//             nm=item.username.toUpperCase();
-//           res.redirect("/");
-//           f=1;
-//           return;
-        
-//         }
-        
-//         });
-//         if (f==0){
-//           req.session.error="Invalid username or password";
-//           res.redirect("/login");
-//           return;
-//         }
-        
-        
-//       }catch (err) { 
-//       console.error(err);
-//     }
-//   }); 
  User.findOne({username:username,password:password}).then((doc)=>{
 
 
@@ -223,11 +168,6 @@ app.post("/signup", (req, res) => {
   const {username,password,email}=req.body;
   const photo=req.file;
   console.log(username,password,photo);
-//   fs.readFile("./users.txt", 'utf8', (err, data) => {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
  User.findOne({username:username,email:email}).then((doc)=>{
     
     if(doc!==null){
@@ -244,10 +184,6 @@ app.post("/signup", (req, res) => {
         req.session.isLoggedin = true;
         nm=doc.username;
         Todo.create({user:doc.username,todo:[]}).then((doc)=>{
-            // if(err){
-            //     console.log(err);
-            //     return;
-            // }
             console.log(doc);
             res.redirect("/");
             return;
@@ -259,77 +195,6 @@ app.post("/signup", (req, res) => {
     });
     }
 
-    //     });
-    // try {
-    //   const parsedData = JSON.parse(data);
-    //   var f=0;
-    //   parsedData.forEach(function(item){
-    //     if(item.email===users.email && f==0){
-    //       req.session.exist="Username already exists!";
-    //       res.redirect("/signup");
-    //       f=1;
-    //       return;
-        
-    //     }
-        
-    //     });
-    //   if (f == 0) {
-    //     parsedData.push(users);
-    //     req.session.user = users.username;
-    //     req.session.password = users.password;
-    //     req.session.image = req.file.filename;
-    //     req.session.isLoggedin = true;
-    //     nm=users.username.toUpperCase();
-          
-    //       const curr = {};
-    //         curr[users.username.toUpperCase()] = [];
-    //     //   saveData("./files.txt", curr, function (err) {
-    //     //       if (err) {
-    //     //           res.status(500).send("error");
-    //     //           return;
-    //     //       }
-              
-    //     //           fs.writeFile("./users.txt", JSON.stringify(parsedData, null, 2), function (err) {
-    //     //               if (err) {
-    //     //                   console.error(err);
-    //     //                   return;
-    //     //               }
-            
-    //     //               // req.session.user=users.username;
-    //     //               // req.session.password=users.password;
-    //     //               // req.session.image=req.file.filename;
-    //     //               // req.session.isLoggedin=true;
-    //     //               res.redirect("/");
-    //     //               return;
-    //     //           });
-        
-    //     //           return;
-            
-    //     //   });
-    //     const cur={
-    //         user:users.username,
-    //         todos:[]
-    //     }
-    //     User.create(users).then((user) => {
-    //         Todo.create(cur).then((todo) => {
-    //             user.todo = [];
-    //             user.save();
-
-    //         res.redirect("/");
-    //     })
-    // }).catch((err) => {
-    //         console.log(err);
-    //         res.render("signup.ejs", { message: "Error in creating user" });
-    //     });
-        
-        
-    // }
-        
-        
-        
-    //   }catch (err) { 
-    //   console.error(err);
-    // }
   }).catch((err)=>{
     console.log(err);
     res.status(500).send("error");
@@ -344,37 +209,7 @@ app.get("/logout",(req,res)=>{
   res.redirect("/");
   
 });
-// app.post("/error",(req,res)=>{
-//   const {username,password}=req.body;
-//   var f=0;
-//   fs.readFile("./users.txt", 'utf8', (err, data) => {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
 
-//     try {
-//       const parsedData = JSON.parse(data);
-//       parsedData.forEach((item)=>{
-//         if(item.username===username && item.password===password){
-//           req.session.user=item.username;
-//           req.session.password=item.password;
-//           req.session.isLoggedin=true;
-//           res.redirect("/");
-          
-//           return;
-//         }
-
-//         })
-//         if(req.session.isLoggedin==false)
-//         {req.session.error="Invalid username or password";
-//           res.redirect("/login");}
-        
-//       }catch (err) { 
-//       console.error(err);
-//     }
-//   }); 
-// });
 app.post("/todo",(req,res)=>{
 
     // const todo=req.body;
@@ -389,29 +224,6 @@ app.post("/todo",(req,res)=>{
         image:req.file.filename,
         completed:false
     }
-    // console.log(todo);
-    // readAllTodos("./files.txt", function (err, data) {
-    //     if (err) {
-    //         res.status(500).send("error");
-    //         return;
-    //     }
-    //     data.forEach((item) => {
-    //         if (item[nm] !== undefined) {
-    //             item[nm].push(todo);
-    //         }
-    //     });
-    //     console.log(data);
-    //     fs.writeFile("./files.txt", JSON.stringify(data, null, 2), function (err) {
-    //         if (err) {
-    //             res.status(500).send("error");
-    //             return;
-    //         }
-    //         // res.redirect("/todo");
-    //         res.render("newtodo.ejs",{user:req.session.user.toUpperCase(),flag:req.session.isLoggedin,image:req.session.image,todos:data})
-
-    //         return;
-    //     });
-    // });
     Todo.findOne({user:req.session.user}).then((user)=>{
         if(user){
             user.todo.push(todos);
@@ -435,25 +247,6 @@ app.post("/todo",(req,res)=>{
     }).catch((err)=>{
         console.log(err);
     })
-
-    
-    // saveData("./files.txt",todo,function(err){
-    //     if(err){
-    //         res.status(500).send("error");
-    //         return;
-    //     }
-    //     readAllTodos("./files.txt",function (err, data) {
-    //       if (err) {
-    //         res.status(500).send("error");
-    //         return;
-    //       }
-    //       datat=JSON.stringify(data);
-    //     res.render("newtodo.ejs",{user:req.session.user.toUpperCase(),flag:req.session.isLoggedin,image:req.session.image,todos:datat})
-    //     return;
-    //     });
-        // res.status(200).send("ok");
-      
-    // });
 });
 app.post("/delete",(req,res)=>{
     removeTask(req.body, function (err) {
@@ -515,7 +308,7 @@ function readAllTodos(file,callback){
 db.init().then(function () {
     console.log("connected to db");
     app.listen(3000, function () {
-        console.log("server started at 3000");
+        console.log("server started at 4600");
     });
 }).catch(function (err) {
     console.error(err);
@@ -538,7 +331,7 @@ function removeTask(body){
                     });
 
                 console.log(value+" deleted");
-                // res.render("newtodo.ejs",{user:req.session.user.toUpperCase(),flag:req.session.isLoggedin,image:req.session.image,todos:user.todo})
+               
             }).catch((err)=>{
                 console.log(err);
             })
@@ -548,71 +341,6 @@ function removeTask(body){
     })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//     fs.readFile("./files.txt", 'utf8', (err, data) => {
-//       if (err) {
-//         console.error(err);
-//         return;
-//       }
-  
-//         try {
-//             const parsedData = JSON.parse(data);
-//             // const parsedDta = parsedData.filter(item => item[nm]);
-//             // const neededData = parsedDta.filter(item => item[property] !== value);
-//             // parsedData.push(neededData);
-//             console.log(nm + " is here");
-//             for (let c = 0; c < parsedData.length; c++) {
-//                 if (parsedData[c][nm] !== undefined) {
-//                     const neededData=parsedData[c][nm].filter(item => item[property] !== value);
-//                     parsedData[c][nm] = neededData;
-//                 }
-//             }
-//             const updatedData = JSON.stringify(parsedData, null, 2);
-
-//             fs.writeFile("./files.txt", updatedData, 'utf8', (err) => {
-//                 if (err) {
-//                     console.error('Error writing to the file:', err);
-//                 } else {
-//                     console.log(`Task : '${value}' removed.`);
-//                 }
-//             });
-            
-
-
-
-
-
-//         //   const parsedData = JSON.parse(data);
-//         //   const parsedDta = parsedData.filter(item => item[req.session.user]);
-//         // const neededData = parsedDta.filter(item => item[property] !== value);
-//         // const updatedData = JSON.stringify(neededData, null, 2);
-  
-//         // fs.writeFile("./files.txt", updatedData, 'utf8', (err) => {
-//         //   if (err) {
-//         //     console.error('Error writing to the file:', err);
-//         //   } else {
-//         //     console.log(`Task : '${value}' removed.`);
-//         //   }
-//         // });
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     });
-// }
 function updateCheckedTodo(body){
 
     //read from file and if content matches then change its ckecked status
@@ -633,57 +361,5 @@ function updateCheckedTodo(body){
         }
     }).catch((err)=>{
         console.log(err);
-    })
-
-
-
-
-
-
-
-//     fs.readFile("./files.txt", 'utf8', (err, data) => {
-//       if (err) {
-//         console.error(err);
-//         return;
-//       }
-  
-//       try {
-//           const parsedData = JSON.parse(data);
-//         //   const parsedDta = parsedData.filter(item => item[nm]);
-//         // const neededData = parsedDta.filter(item => item[property] === value);
-// //   console.log(parsedData)
-//           for (let c = 0; c < parsedData.length; c++) {
-//               if (parsedData[c][nm] !== undefined) {
-//                   parsedData[c][nm].forEach((item) => {
-//                       if (item[property] === value) {
-//                           item.completed = !item.completed;
-//                       }
-//                   });
-//               }
-//           }
-          
-          
-          
-//         // parsedDta.forEach((item)=>{  
-//         //   if(item[property]===value){
-//         //     item.completed=!item.completed;
-//         //   }
-//         // });
-//         console.log(parsedData);
-//         const updatedData = JSON.stringify(parsedData, null, 2);
-  
-//         fs.writeFile("./files.txt", updatedData, 'utf8', (err) => {
-//           if (err) {
-//             console.error('Error writing to the file:', err);
-//           } else {
-//             console.log(`Task : '${value}' status updated!`);
-//           }
-//         });
-              
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     }
-// });
-  
+    })  
 }
