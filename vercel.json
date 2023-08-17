@@ -3,7 +3,7 @@
     "builds": [
       {
         "src": "dbserver.js",
-        "use": "@now/node"
+        "use": "@vercel/node"
       }
     ],
     "routes": [
