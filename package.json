@@ -2,7 +2,7 @@
   "name": "todo",
   "version": "1.0.0",
   "description": "",
-  "main": "newserver.js",
+  "main": "dbserver.js",
   "engines": {
     "node": "18.x"
   },
