@@ -2,14 +2,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "./dbserver.js",
-        "use": "@vercel/node"
+        "src": "dbserver.js",
+        "use": "@now/node"
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "/"
+        "dest": "dbserver.js"
       }
     ]
   }
